@@ -1,0 +1,115 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+  background: #fafafa;
+  min-height: 100vh;
+}
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+header {
+  background: #4e70c5;
+  color: #fff;
+  padding: 1rem 2rem;
+}
+header h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+}
+nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+nav ul li {
+  margin-right: 2rem;
+}
+nav ul li:last-child {
+  margin-right: 0;
+}
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+}
+nav a.active, nav a:hover {
+  text-decoration: underline;
+}
+main {
+  flex: 1;
+  padding: 2rem;
+}
+section {
+  margin-bottom: 2rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #ddd;
+  padding: 1.5rem;
+}
+button {
+  background: #447be0;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1.5rem;
+  margin-right: 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+button:hover {
+  background: #325ca8;
+}
+.hint {
+  font-size: 0.85rem;
+  color: #999;
+  margin-left: 8px;
+}
+.sort-filter button {
+  background: #edc447;
+  color: #222;
+}
+.grades {
+  margin-top: 2rem;
+}
+.grade {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-right: 0.5rem;
+}
+.grade.green { color: #2ecc40; }
+.grade.red { color: #c00; }
+.grade.black { color: #333; }
+.points {
+  font-size: 0.95rem;
+  margin-left: 10px;
+}
+footer {
+  background: #274077;
+  color: #fff;
+  text-align: center;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  margin-top: auto;
+  box-shadow: 0 -2px 8px #bbb;
+}
+footer nav a {
+  color: #fff;
+  margin: 0 0.5rem;
+  text-decoration: underline;
+}
+article {
+  margin-bottom: 1.5rem;
+}
+@media (max-width: 600px) {
+  header, main, footer { padding: 1rem; }
+  nav ul { flex-direction: column; }
+  nav ul li { margin: 0 0 0.5rem 0; }
+}

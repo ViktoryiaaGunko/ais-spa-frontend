@@ -1,10 +1,118 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>АИС "Оценки и задания"</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
+<body>
+<div class="wrapper">
+  <!-- заголовок -->
+  <header>
+    <h1>АИС «Оценки и задания»</h1>
+    <nav>
+      <ul>
+        <li><a href="#" class="active">Главная</a></li>
+        <li><a href="#">Задания</a></li>
+        <li><a href="#">Мои оценки</a></li>
+        <li><a href="#">Поиск</a></li>
+        <li><a href="#">Админ</a></li>
+        <li><a href="#">Войти</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Главная форма -->
+    <section id="home">
+      <h2>Добро пожаловать!</h2>
+      <p>Используйте меню для перехода к нужному разделу сайта.</p>
+      <!-- Кнопки загрузки дополнительных страниц -->
+      <button>Посмотреть задания </button>
+      <button>Посмотреть оценки </button>
+      <button>Панель администратора </button>
+    </section>
+
+    <!-- Форма авторизации -->
+    <section id="auth" hidden>
+      <h2>Авторизация</h2>
+      <form>
+        <label for="user">Имя пользователя:</label>
+        <input type="text" id="user" name="user">
+
+        <label for="pass">Пароль:</label>
+        <input type="password" id="pass" name="pass">
+
+        <button type="submit">Войти</button>
+      </form>
+    </section>
+
+    <!-- Форма поиска -->
+    <!--Форма поиска — можно искать студента, группу, преподавателя, дисциплину-->
+    <section id="search" hidden>
+      <h2>Поиск</h2>
+      <input type="text" placeholder="ФИО или дисциплина">
+      <button>Искать </button>
+    </section>
+
+    <!-- Форма управления заданиями для сотрудников учебной части — добавлять,
+    редактировать, удалять задания, студентов, дисциплины-->
+    <section id="manage-tasks" hidden>
+      <h2>Добавить/Редактировать/Удалить задание</h2>
+      <form>
+        <input type="text" placeholder="Название задания">
+        <input type="date">
+        <!--Через выпадающий список можно распределить задания по группам, курсам или предметам-->
+        <select>
+          <option>Студент</option>
+          <option>Группа</option>
+          <option>Дисциплина</option>
+        </select>
+        <!--Через эту форму преподаватель может выставить отметку по сдаче — добавить новую, изменить, удалить ошибочную-->
+        <button type="submit">Добавить <span class="hint">Добавляет задание в список</span></button>
+        <button type="button">Редактировать</button>
+        <button type="button">Удалить</button>
+      </form>
+    </section>
+
+    <!-- Форма оценок -->
+    <!--Студент видит свою таблицу сдачи, бонусов, штрафов и рейтинг
+    по дисциплине.-->
+    <section id="ratings" hidden>
+      <h2>Мои оценки</h2>
+      <div class="sort-filter">
+        <button>Сортировать по дате</button>
+        <button>Сортировать по баллам</button>
+        <button>Фильтровать задания</button>
+      </div>
+      <div class="grades">
+        <article>
+          <h3>Математика</h3>
+          <ul>
+            <li>Задание 1: <span class="grade green">+</span> <span class="points">Бонус: 2</span></li>
+            <li>Задание 2: <span class="grade red">-</span> <span class="points">Штраф: 1</span></li>
+            <li>Задание 3: <span class="grade black">±</span> <span class="points">Штраф: 0</span></li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- Форма ошибки -->
+    <section id="error" hidden>
+      <h2>Ошибка</h2>
+      <p>Что-то пошло не так. <a href="#" onclick="location.reload();">Вернуться на главную</a></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Университет. АИС «Оценки и задания».</p>
+    <nav>
+      <a href="#">Политика конфиденциальности</a>
+      <a href="#">Контакты</a>
+    </nav>
+  </footer>
+</div>
 </body>
 </html>
