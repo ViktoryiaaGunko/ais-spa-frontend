@@ -1,16 +1,18 @@
 /**
- АИС «Оценки и задания»
-  - id (string)
-  - description (string) - Название задания
-  - createdAt (Date) - Дата создания записи
-  - author (string) - Преподаватель
-  - photoLink (string) - Ссылка (необязательно)
-  - student (string) - ФИО студента
-  - discipline (string) - Дисциплина
-  - deadline (Date) - Срок сдачи
-  - submissionDate (Date | null) - Когда сдал (null, если не сдал)
-  - grade (string) - Оценка ('+', '±', '-')
+ * АИС «Оценки и задания»
+ *
+ * - id (string)
+ * - description (string) - Название задания
+ * - createdAt (Date) - Дата создания записи
+ * - author (string) - Преподаватель
+ * - photoLink (string) - Ссылка (необязательно)
+ * - student (string) - ФИО студента
+ * - discipline (string) - Дисциплина
+ * - deadline (Date) - Срок сдачи
+ * - submissionDate (Date | null) - Когда сдал (null, если не сдал)
+ * - grade (string) - Оценка ('+', '±', '-')
  */
+
 const mockGrades = [
     {
         id: '1',
@@ -254,8 +256,10 @@ const mockGrades = [
     },
 ];
 
+/**
+ * Класс модели GradeList (задание 5)
+ */
 class GradeList {
-    // Приватное поле для хранения задания/оценки
     _grades = [];
 
     constructor(data) {
@@ -272,9 +276,8 @@ class GradeList {
         return value instanceof Date && !isNaN(value);
     }
 
-    // Проверка валидности объекта
+    // Проверка валидности структуры
     _validateStructure(obj) {
-        // Проверка обязательных полей
         if (!obj.id || !this._isString(obj.id)) return false;
         if (!obj.description || !this._isString(obj.description) || obj.description.length >= 200) return false;
         if (!obj.createdAt || !this._isDate(obj.createdAt)) return false;
@@ -282,15 +285,14 @@ class GradeList {
         return true;
     }
 
-    /** массив объектов с пагинацией и фильтрацией       */
+    /** Получить массив объектов с пагинацией и фильтрацией */
     getObjs(skip = 0, top = 10, filterConfig = {}) {
         let result = this._grades;
-        // Фильтрация
+
         if (Object.keys(filterConfig).length > 0) {
-            result = result.filter(item => {
+            result = result.filter((item) => {
                 let isValid = true;
                 for (let key in filterConfig) {
-                    // Если у объекта нет такого поля или значение не совпадает
                     if (item[key] === undefined || item[key] !== filterConfig[key]) {
                         isValid = false;
                         break;
@@ -299,19 +301,18 @@ class GradeList {
                 return isValid;
             });
         }
-        // Сортировка по дате создания
+
         result.sort((a, b) => b.createdAt - a.createdAt);
-        // Пагинация
         return result.slice(skip, skip + top);
     }
 
     /** Получить один объект по ID */
     getObj(id) {
-        const found = this._grades.find(item => item.id === id);
+        const found = this._grades.find((item) => item.id === id);
         return found || null;
     }
 
-    /** метод валидации */
+    /** Валидация */
     validateObj(obj) {
         return this._validateStructure(obj);
     }
@@ -322,7 +323,6 @@ class GradeList {
             console.warn('Ошибка валидации при добавлении объекта');
             return false;
         }
-        // если существует объект с таким id
         if (this.getObj(obj.id)) {
             console.warn(`Объект с id ${obj.id} уже существует`);
             return false;
@@ -331,31 +331,26 @@ class GradeList {
         return true;
     }
 
-    /** Редактировать объект по id
-      Нельзя менять: id, author, createdAt     */
+    /** Редактирование объекта по id (нельзя менять id, author, createdAt) */
     editObj(id, newObj) {
-        const index = this._grades.findIndex(item => item.id === id);
+        const index = this._grades.findIndex((item) => item.id === id);
         if (index === -1) {
             console.warn('Объект для редактирования не найден');
             return false;
         }
-        // копия объкта
-        const currentObj = this._grades[index];
 
-        // поля, которые нельзя менять
+        const currentObj = this._grades[index];
         const protectedFields = ['id', 'author', 'createdAt'];
         const objToMerge = { ...newObj };
 
-        protectedFields.forEach(field => {
+        protectedFields.forEach((field) => {
             if (objToMerge.hasOwnProperty(field)) {
-                delete objToMerge[field]; // удаляем поля которые есть в списке protectedFields, нельзя менять
+                delete objToMerge[field];
             }
         });
 
-        //слияние, если поля совпадают, берем то, что справа - новое
         const updatedObj = { ...currentObj, ...objToMerge };
 
-        // Проверяем валидность
         if (!this.validateObj(updatedObj)) {
             console.warn('Новая версия объекта не прошла валидацию');
             return false;
@@ -365,79 +360,218 @@ class GradeList {
         return true;
     }
 
-    /**  Удалить объект по id  */
+    /** Удалить объект по id */
     removeObj(id) {
-        const index = this._grades.findIndex(item => item.id === id);
+        const index = this._grades.findIndex((item) => item.id === id);
         if (index === -1) return false;
-
-        this._grades.splice(index, 1); //удаление
+        this._grades.splice(index, 1);
         return true;
     }
 
-    /** Добавить массив объектов      */
+    /** Добавить массив объектов */
     addAll(objs) {
         const invalidObjs = [];
-        objs.forEach(obj => {
-            if(!this.addObj(obj)) {
+        objs.forEach((obj) => {
+            if (!this.addObj(obj)) {
                 invalidObjs.push(obj);
             }
         });
-        return invalidObjs; //  те объексты, что не удалось добавить
+        return invalidObjs;
     }
 
-    /** Очистка     */
+    /** Очистка */
     clear() {
         this._grades = [];
     }
 }
 
+/** Часть 6b */
 
-//  тестирование
+let currentUser = 'Student Name'; // текущий пользователь или null
+
+// экземпляр модели
 const gradeSystem = new GradeList(mockGrades);
 
-console.log("--- Тест 1: Получение первых 5 записей ---");
-console.log(gradeSystem.getObjs(0, 5));
+/**  View-класс для отображения оценок и пользователя (2) */
+class GradesView {
+    constructor(containerSelector) {
+        this.container = document.querySelector(containerSelector);
+        if (!this.container) {
+            console.warn('GradesView: контейнер не найден');
+        }
+    }
 
-console.log("--- Тест 2: Фильтрация (все работы Иванова И.И.) ---");
-console.log(gradeSystem.getObjs(0, 10, { author: 'Иванов И.И.' }));
+    /* удаляет всё, что отрисовано, чтобы перед перерисовкой списка не смешивать старые и новые элементы */
+    clear() {
+        if (!this.container) return;
+        this.container.innerHTML = '';
+    }
 
-console.log("--- Тест 3: Фильтрация (все несданные работы '-') ---");
-console.log(gradeSystem.getObjs(0, 10, { grade: '-' }));
+    /* Определение цвета оценки */
+    _getGradeClass(grade) {
+        if (grade === '+' || grade === 'A' || grade === 'B') {
+            return 'green';
+        }
+        if (grade === '±' || grade === 'F') {
+            return 'red';
+        }
+        return 'black';
+    }
 
-console.log("--- Тест 4: Получение по ID (id='5') ---");
-console.log(gradeSystem.getObj('5'));
+    /* перерисовка списка DOM */
+    renderList(grades) {
+        if (!this.container) return;
+        /*чтобы начать с пустого списка*/
+        this.clear();
 
-console.log("--- Тест 5: Добавление валидного объекта ---");
-const newValidTask = {
-    id: '100',
-    description: 'Лабораторная работа 2',
-    createdAt: new Date(),
-    author: 'Петрова Ю.Ю.',
-    student: 'Апов Е.Ю.',
-    discipline: 'История',
-    deadline: new Date(),
-    submissionDate: null,
-    grade: '-'
-};
-console.log('Результат добавления:', gradeSystem.addObj(newValidTask));
-console.log('Проверка наличия:', gradeSystem.getObj('100'));
+        grades.forEach((g) => {
+            const article = document.createElement('article');
 
-console.log("--- Тест 6: Добавление невалидного объекта (без author) ---");
-const invalidTask = {
-    id: '101',
-    description: 'Лабораторная работа 2',
-    createdAt: new Date(),
-};
-console.log('Результат добавления:', gradeSystem.addObj(invalidTask));
+            const title = document.createElement('h3');
+            title.textContent = `${g.discipline || 'Предмет'} — ${g.student || 'Студент'}`;
 
-console.log("--- Тест 7: Редактирование (меняем оценку у id='1' на '±') ---");
-console.log('Результат редактирования:', gradeSystem.editObj('1', { grade: '±' }));
-console.log('Обновленный объект:', gradeSystem.getObj('1'));
+            const ul = document.createElement('ul');
 
-console.log("--- Тест 8: Попытка сменить автора (запрещено) ---");
-gradeSystem.editObj('1', { author: 'Лавров П.П.' });
-console.log('Автор после попытки взлома:', gradeSystem.getObj('1').author); // Иванов И.И.
+            /* Собирается список <ul> из пунктов <li> */
+            const liDesc = document.createElement('li');
+            liDesc.textContent = `Описание: ${g.description}`;
 
-console.log("--- Тест 9: Удаление объекта (id='100') ---");
-console.log('Результат удаления:', gradeSystem.removeObj('100'));
-console.log('Поиск после удаления:', gradeSystem.getObj('100'));
+            const liDeadline = document.createElement('li');
+            liDeadline.textContent = `Дедлайн: ${
+                g.deadline ? g.deadline.toLocaleString() : '-'
+            }`;
+
+            const liSubmission = document.createElement('li');
+            liSubmission.textContent = `Сдача: ${
+                g.submissionDate ? g.submissionDate.toLocaleString() : '-'
+            }`;
+
+            /* Ещё один <li> для оценки: */
+            const liGrade = document.createElement('li');
+            const gradeSpan = document.createElement('span');
+            gradeSpan.classList.add('grade', this._getGradeClass(g.grade));
+            gradeSpan.textContent = g.grade || '-';
+
+            const pointsSpan = document.createElement('span');
+            pointsSpan.classList.add('points');
+            pointsSpan.textContent = `id: ${g.id}`;
+
+            liGrade.appendChild(gradeSpan);
+            liGrade.appendChild(pointsSpan);
+
+            /*  Ещё один <li> для оценки: */
+            ul.appendChild(liDesc);
+            ul.appendChild(liDeadline);
+            ul.appendChild(liSubmission);
+            ul.appendChild(liGrade);
+
+            article.appendChild(title);
+            article.appendChild(ul);
+
+            // Кнопки редактирования/удаления только при наличии пользователя
+            if (currentUser) {
+                const actions = document.createElement('div');
+
+                const editBtn = document.createElement('button');
+                editBtn.textContent = 'Редактировать';
+                editBtn.onclick = () => {
+                    console.log('Вызов editObj из консоли:', g.id);
+                };
+
+                const removeBtn = document.createElement('button');
+                removeBtn.textContent = 'Удалить';
+                removeBtn.onclick = () => {
+                    console.log('Вызов removeObj из консоли:', g.id);
+                };
+
+                actions.appendChild(editBtn);
+                actions.appendChild(removeBtn);
+                article.appendChild(actions);
+            }
+
+            this.container.appendChild(article);
+        });
+    }
+
+    // Готовый <article> добавляется в основной контейнер .grades
+    renderUser(selector) {
+        const el = document.querySelector(selector);
+        if (!el) return;
+        el.textContent = currentUser
+            ? `Пользователь: ${currentUser}`
+            : 'Гость (не авторизован)';
+    }
+}
+
+const gradesView = new GradesView('.grades');
+
+/** Первичная инициализация страницы  */
+function initPage() {
+    // Берём первые 10 объектов из модели gradeSystem
+    const list = gradeSystem.getObjs(0, 10, {});
+    //Передаём этот массив в GradesView, который строит DOM для каждой записи
+    gradesView.renderList(list);
+    gradesView.renderUser('#current-user');
+}
+
+document.addEventListener('DOMContentLoaded', initPage);
+
+/**
+ * Глобальный модуль для демонстрации бизнес-логики через консоль (3)
+ * Вызов: domModule.addObj({...}), domModule.editObj('1', {...}) и т.д.
+ */
+window.domModule = (function () {
+    function refresh(filterConfig = {}, skip = 0, top = 10) {
+        const list = gradeSystem.getObjs(skip, top, filterConfig);
+        gradesView.renderList(list);
+    }
+
+    function addObj(obj) {
+        const ok = gradeSystem.addObj(obj);
+        if (ok) {
+            refresh();
+        } else {
+            console.warn('addObj: объект не добавлен (невалиден или id уже существует)');
+        }
+        return ok;
+    }
+
+    function removeObj(id) {
+        const ok = gradeSystem.removeObj(id);
+        if (ok) {
+            refresh();
+        } else {
+            console.warn('removeObj: объект с таким id не найден');
+        }
+        return ok;
+    }
+
+    function editObj(id, obj) {
+        const ok = gradeSystem.editObj(id, obj);
+        if (ok) {
+            refresh();
+        } else {
+            console.warn('editObj: объект не изменён (не найден или невалиден)');
+        }
+        return ok;
+    }
+
+    function setFilter(filterConfig) {
+        refresh(filterConfig);
+    }
+
+    function setUser(nameOrNull) {
+        currentUser = nameOrNull;
+        gradesView.renderUser('#current-user');
+        refresh();
+    }
+
+    return {
+        refresh,
+        addObj,
+        removeObj,
+        editObj,
+        setFilter,
+        setUser,
+    };
+})();
