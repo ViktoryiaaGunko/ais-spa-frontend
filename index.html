@@ -39,7 +39,7 @@
     <!-- Авторизация -->
     <section id="auth">
       <h2>Авторизация</h2>
-      <form>
+      <form id="auth-form">
         <label for="user">Имя пользователя:</label>
         <input type="text" id="user" name="user" />
 
@@ -60,7 +60,7 @@
     <!-- Панель администратора: добавление/редактирование/удаление -->
     <section id="manage-tasks">
       <h2>Добавить/Редактировать/Удалить задание</h2>
-      <form>
+      <form >
         <label>
           Студент
           <input type="text" placeholder="ФИО студента" />
@@ -93,7 +93,7 @@
           </select>
         </label>
 
-        <button type="submit">Добавить</button>
+        <button type="button">Добавить</button>
         <span class="hint">Добавляет задание в список</span>
 
         <button type="button">Редактировать</button>
@@ -109,6 +109,7 @@
         <button>Сортировать по дате</button>
         <button>Сортировать по баллам</button>
         <button>Фильтровать задания</button>
+        <button id="load-more">Ещё 10</button>
       </div>
 
       <!-- ВАЖНО: здесь не должно быть заранее прописанных ObjInf.
